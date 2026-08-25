@@ -1,0 +1,39 @@
+name: NEAR CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, near-rewrite-v1]
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile near_core.py near_app.py kawai.py install.py test_near_core.py
+      - name: Unit tests
+        run: python -m unittest -v test_near_core.py
+
+  flutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: stable
+          cache: true
+      - name: Pub get
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Build debug APK
+        run: flutter build apk --debug
