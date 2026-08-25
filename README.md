@@ -1,87 +1,121 @@
-## KawaiiGPT
+# NEAR
 
-<div align="center">
-    <img src="kawaii.svg" width="50%" height="300%" />
-</div>
+**Local Real-Time Social World**
 
-- THIS TOOLS HAS BEEN CLOSED FROM ADMIN, AND IT'S NOW OPEN SOURCE, USE IT FOR LEARNING!.
-> Forum: [Telegram](https://t.me/kawaiigpt_official)
+KawaiiGPT is being repurposed as the NEAR prototype/development base.
 
-## Use (Linux Distro)
----
-``` bash
-apt-get update && apt-get upgrade (if not updated and upgraded)
-apt install python3 && apt install python3-pip
-apt install git
-git clone https://github.com/MrSanZz/KawaiiGPT
-cd KawaiiGPT
-python3 install.py
-python3 kawai.py
+NEAR core:
+
+- **Closest First** — show the nearest active person first.
+- **10-Minute World** — the user's local social world is centered on a 10-minute discovery radius.
+- **Recent Here** — safe recent-presence discovery such as “5分前にこの周辺”.
+- **NOW** — short-lived, location-aware social posts.
+- **Chat** — move from discovery to conversation in one action.
+- **Connection** — mutual relationship state before optional external contact sharing.
+- **Touch World** — lightweight pointer-following glow, particles, motion and haptics on supported clients.
+- **Safety First** — raw GPS is never a public client field; location is aggregated/limited before discovery.
+
+## Current prototype
+
+The repository now contains a **zero-dependency Python local prototype** for the first UX slice.
+
+```text
+Open
+  ↓
+Nearby
+  ↓
+Closest First
+  ↓
+Touch World
+  ↓
+Profile / Chat
+  ↓
+Recent Here
+  ↓
+NOW
 ```
 
-## Use (Termux)
+Start on Windows/macOS/Linux with Python 3:
 
-``` bash
-pkg update && pkg upgrade (if not updated and upgraded)
-pkg install python3
-pkg install git
-git clone https://github.com/MrSanZz/KawaiiGPT
-cd KawaiiGPT
-python3 install.py
-python3 kawai.py
-```
----
-- *Have fun! (support me with star ⭐ !!)*
-
-## Information
-
-KawaiiGPT uses a **reverse-engineered LLM API wrapper** original agents at:
-
-> [https://github.com/pollinations/pollinations](https://github.com/pollinations/pollinations)
-
-For the rest Back-End, it uses a server to serve other obtainable LLM such as DeepSeek, Gemini, or Kimi-K2
-
-## ⚠️ =Disclaimer=
->
-> * This project was made to be **fun**!
-> * All risks or consequences that you have done are **your own responsibility**.
-> * Changing or selling this tools is prohibited and not allowed!. ⚠
-> * Using a **prepared** model, **not** a fine-tuned model!
-> * All LLM here uses a prompt injection! (jailbreak has been written on help-menu)
-> * This is KawaiiGPT, not WormGPT, **made to be fun or companies!**
-> * WormGPT tag only **used for jailbreaked model**
----
-
-# QnA
-``` plain
-"Why is it obfuscated?"
-
-Me: Okay, many people asking this question, the reason why i obfuscate the
-    code is because I want to avoid recoding and renaming which ends up 
-    selling KawaiiGPT tools under my name and claiming that it belongs to them
-
-"This is obviously a virus or a RAT"
-
-Me: Seriously, i'm enough with this question over time. No, there is no RAT, Spyware,
-    Malware, Ransom, etc. Why would i do that? because it's free and obfuscated
-    doesn't mean i wanna trap you all, **i wouldn't**. If that wasn't from me
-    don't run it or you would fall in a trap. 
-
-"But why is it obfuscated?"
-
-Me: Like what i said earlier, "I want to avoid recoding and renaming which ends up 
-    selling KawaiiGPT tools under my name and claiming that it belongs to them".
-    Please understand that i wouldn't put a malicious code into my tools/code,
-    if somebody said "KawaiiGPT has a virus!!" in Telegram or other please don't
-    trust it, maybe they just want to bring down my name or they got the wrong KawaiiGPT
-    that is not from me.
+```bash
+python install.py
 ```
 
-## Conclusion:
----
-I never put any malicious code or even malicious software into my code/tools
-if it's obfuscated that means I just want to avoid recoding and selling
---
+Or:
 
-> Best regards, ```MrSanZz+Shoukaku07+FlamabyX5```
-Made with 🔥
+```bash
+python kawai.py
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8787
+```
+
+Health check:
+
+```text
+http://127.0.0.1:8787/health
+```
+
+## Docker policy
+
+**Docker is not required and is not part of the NEAR architecture.**
+
+The target production architecture is:
+
+```text
+Flutter / Dart client
+        ↓
+Supabase Cloud
+  ├─ PostgreSQL
+  ├─ Auth
+  ├─ Realtime
+  ├─ Storage
+  └─ Edge Functions
+```
+
+The current local prototype intentionally uses only the Python standard library. It does not create a local database and does not depend on Docker.
+
+## Directory intent
+
+```text
+near_app.py      local prototype server + mobile-first UX slice
+near_core.py     domain models + closest-first ranking primitives
+kawai.py         compatibility launcher, now starts NEAR
+install.py       Docker-free NEAR launcher
+requirements.txt zero third-party dependencies for the prototype
+```
+
+## Important privacy rule
+
+The public client domain models do **not** expose raw latitude/longitude. Production location flows must use a privacy boundary such as:
+
+```text
+raw device location
+  ↓
+private service location
+  ↓
+aggregation / precision reduction
+  ↓
+Nearby / Recent Here
+```
+
+Never expose a user's raw GPS coordinates to another user.
+
+## Development order
+
+1. Finish the local UX vertical slice.
+2. Establish Supabase Cloud schema and RLS.
+3. Port Nearby/Chat/NOW to Supabase Realtime.
+4. Add real device location with privacy aggregation.
+5. Add Recent Here safety gates.
+6. Add push notifications, analytics and admin.
+7. Add Premium / Ads / Affiliate only after the social core is stable.
+
+## Status
+
+`NEAR prototype — Wave 1 foundation`
+
+This repository is a development base. The local prototype uses representative data for UI validation; it does not claim those users or locations are real.
